@@ -92,3 +92,16 @@ def make_output_dir():
     path = f'output/point_cloud_info_generated_at_{datetime.now().strftime("%Y_%m_%d_%H_%M_%S")}'
     os.makedirs(path, exist_ok=True)
     return path
+
+
+def is_in_arena(x, y, z, x_min, x_max, y_min, y_max, z_min, z_max):
+    if not x_min < x < x_max:
+        print(f'error: x out of arena, x:{x}, x_min:{x_min}, x_max:{x_max}')
+        return False
+    if not y_min < y < y_max:
+        print(f'error: y out of arena, y:{y}, y_min:{y_min}, y_max:{y_max}')
+        return False
+    if not z_min < z < z_max:
+        print(f'error: z out of arena, z:{z}, z_min:{z_min}, z_max:{z_max}')
+        return False
+    return True
