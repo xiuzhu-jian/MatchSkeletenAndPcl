@@ -30,13 +30,13 @@ def match(skeleton_data_folder: str, pcl_data_folder: str):
     return matched_data_list
 
 
-def generate_target_info(skeleton_json, d455_x, d455_y, d455_z):
+def generate_target_info(skeleton_json, d455_x, d455_y, d455_z, posture, action):
     skeleton_in_vc_coord_system = covert_skeleton_to_vc_coordinate_system(skeleton_json, d455_x, d455_y, d455_z)
     if skeleton_in_vc_coord_system is None:
         return None
     target_info = {
-        'posture': 'stand',
-        'action': 'walk',
+        'posture': posture,
+        'action': action,
         'isfall': 'no',
         'skeleton': skeleton_in_vc_coord_system,
         'bbox': get_bbox(convert_skeleton_json_to_matrix(skeleton_json))
@@ -44,10 +44,10 @@ def generate_target_info(skeleton_json, d455_x, d455_y, d455_z):
     return target_info
 
 
-def generate_targets_info(targets_json, d455_x, d455_y, d455_z):
+def generate_targets_info(targets_json, d455_x, d455_y, d455_z, posture, action):
     targets_info = []
     for target in targets_json:
-        target_info = generate_target_info(target['skeleton'], d455_x, d455_y, d455_z)
+        target_info = generate_target_info(target['skeleton'], d455_x, d455_y, d455_z, posture, action)
         if target_info is None:
             return None
         targets_info.append(target_info)
@@ -86,7 +86,9 @@ def process(data):
         sk_f = open(sk_file, 'r')
         json_data = json.load(sk_f)
         sk_f.close()
-        targets_info = generate_targets_info(json_data['gt_info'], d455_x, d455_y, d455_z)
+
+        posture, action = get_posture_and_action_label(os.path.basename(pcl_file))
+        targets_info = generate_targets_info(json_data['gt_info'], d455_x, d455_y, d455_z, posture, action)
         if targets_info is None:
             print(f'error: generate_targets_info failed, skeleton out of arena: {sk_file}')
             print('----------')

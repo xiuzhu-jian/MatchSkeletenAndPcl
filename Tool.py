@@ -105,3 +105,7 @@ def is_in_arena(x, y, z, x_min, x_max, y_min, y_max, z_min, z_max):
         print(f'error: z out of arena, z:{z}, z_min:{z_min}, z_max:{z_max}')
         return False
     return True
+
+
+def get_posture_and_action_label(pcl_filename: str):
+    return pcl_filename.split('_', 2)[:2]
