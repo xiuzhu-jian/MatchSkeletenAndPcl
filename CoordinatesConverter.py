@@ -12,7 +12,7 @@ def d455_to_vayyar_care(x, y, z, d455_x, d455_y, d455_z):
     Returns:
         coordinates in Vayyar Care's coordinate system
     """
-    xv = -(-d455_x + x)
+    xv = -d455_x + x
     yv = d455_y + z
     zv = -(-d455_z + y)
     return xv, yv, zv
