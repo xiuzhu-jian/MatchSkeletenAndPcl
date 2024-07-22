@@ -1,9 +1,9 @@
-from Config import config
+from Config import Config
 from CoordinatesConverter import d455_to_vayyar_care
 from Tool import *
 
 
-def match(skeleton_data_folder: str, pcl_data_folder: str):
+def match(skeleton_data_folder: str, pcl_data_folder: str, output_dir, config):
     skeleton_files = get_files_list(skeleton_data_folder, get_timestamp_ms_in_skeleton_filename)
     pcl_files = get_files_list(pcl_data_folder, get_timestamp_ms_in_pcl_filename)
 
@@ -27,11 +27,12 @@ def match(skeleton_data_folder: str, pcl_data_folder: str):
              str(pcl_timestamp), str(sk_timestamp)])
 
     # csv_file.close()
-    return matched_data_list
+
+    process(matched_data_list, config, output_dir)
 
 
-def generate_target_info(skeleton_json, d455_x, d455_y, d455_z, posture, action):
-    skeleton_in_vc_coord_system = covert_skeleton_to_vc_coordinate_system(skeleton_json, d455_x, d455_y, d455_z)
+def generate_target_info(skeleton_json, posture, action, config):
+    skeleton_in_vc_coord_system = covert_skeleton_to_vc_coordinate_system(skeleton_json, config)
     if skeleton_in_vc_coord_system is None:
         return None
     target_info = {
@@ -44,21 +45,21 @@ def generate_target_info(skeleton_json, d455_x, d455_y, d455_z, posture, action)
     return target_info
 
 
-def generate_targets_info(targets_json, d455_x, d455_y, d455_z, posture, action):
+def generate_targets_info(targets_json, posture, action, config):
     targets_info = []
     for target in targets_json:
-        target_info = generate_target_info(target['skeleton'], d455_x, d455_y, d455_z, posture, action)
+        target_info = generate_target_info(target['skeleton'], posture, action, config)
         if target_info is None:
             return None
         targets_info.append(target_info)
     return targets_info
 
 
-def covert_skeleton_to_vc_coordinate_system(skeleton_json, d455_x, d455_y, d455_z):
+def covert_skeleton_to_vc_coordinate_system(skeleton_json, config):
     skeleton_data_in_pcl_coordinate_system = []
     for keypoint in skeleton_json:
         xv, yv, zv = d455_to_vayyar_care(keypoint['x'], keypoint['y'], keypoint['z'],
-                                         d455_x, d455_y, d455_z)
+                                         config.d455_x, config.d455_y, config.d455_z)
         if not is_in_arena(xv, yv, zv, config.x_min, config.x_max, config.y_min, config.y_max, config.z_min,
                            config.z_max):
             print(f"error: is_in_arena failed, index:{keypoint['index']}, "
@@ -70,12 +71,7 @@ def covert_skeleton_to_vc_coordinate_system(skeleton_json, d455_x, d455_y, d455_
     return skeleton_data_in_pcl_coordinate_system
 
 
-def process(data):
-    output_dir = make_output_dir()
-
-    d455_x = config.d455_x
-    d455_y = config.d455_y
-    d455_z = config.d455_z
+def process(data, config, output_dir):
     for pcl_file, sk_file, pcl_timestamp, sk_timestamp in data:
         point_cloud_info = {'timestamp': pcl_timestamp}
         pcl = read_pcl_from_txt(pcl_file)
@@ -87,8 +83,14 @@ def process(data):
         json_data = json.load(sk_f)
         sk_f.close()
 
+        people_count = len(json_data['gt_info'])
+        if people_count < 2:
+            print(f'error: should more than 1 people, but only {people_count}')
+            print('----------')
+            continue
+
         posture, action = get_posture_and_action_label(os.path.basename(pcl_file))
-        targets_info = generate_targets_info(json_data['gt_info'], d455_x, d455_y, d455_z, posture, action)
+        targets_info = generate_targets_info(json_data['gt_info'], posture, action, config)
         if targets_info is None:
             print(f'error: generate_targets_info failed, skeleton out of arena: {sk_file}')
             print('----------')
@@ -101,6 +103,8 @@ def process(data):
 
 
 if __name__ == '__main__':
-    matched = match(r'C:\Users\XiuzhuJian_05qqcw2\PycharmProjects\D455Test\output\20240709-1444',
-                    r'C:\jxz\PycharmProjects\VayyarCareDataCollector\console\data\2024-07-09-lab-YZX\Wall-vc1-ip-192.168.8.41\Wash feet-30-s_7_20240709-1444')
-    process(matched)
+    output_dir = make_output_dir()
+    match(r'C:\Users\XiuzhuJian_05qqcw2\PycharmProjects\D455Test\output\20240711-1609',
+          r'C:\jxz\PycharmProjects\VayyarCareDataCollector\console\data\2024-07-11-lab-YZX\Wall-vc1-ip-192.168.8.41\walk-30-s_4_20240711-1609',
+          output_dir,
+          Config(0, 0, 0.78, -1.5, 1.5, 0.2, 3, 0, 1.8))
