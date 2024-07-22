@@ -35,9 +35,6 @@ def visualize_pointcloud_and_skeleton(directory_path, x_lim, y_lim, z_lim):
         pointcloud = np.array([[p['x'], p['y'], p['z']] for p in pointcloud])
         skeleton = np.array([[s['x'], s['y'], s['z']] for s in skeleton])
 
-        skeleton_target = skeleton
-
-        
         ax1.set_title(f'Vstraw Points and 3D Skeleton Points {formatted_timestamp}')
         ax1.set_xlabel('X axis')
         ax1.set_ylabel('Y axis')
@@ -46,22 +43,27 @@ def visualize_pointcloud_and_skeleton(directory_path, x_lim, y_lim, z_lim):
         ax1.set_ylim(y_lim)
         ax1.set_zlim(z_lim)
         ax1.scatter(pointcloud[:, 0], pointcloud[:, 1], pointcloud[:, 2], c='blue', marker='o', alpha=0.3)
-        ax1.scatter(skeleton_target[:, 0], skeleton_target[:, 1], skeleton_target[:, 2], c='green', marker='o')
 
-        for joint1, joint2 in skeleton_connect:
-            x_values = [skeleton_target[joint1, 0], skeleton_target[joint2, 0]]
-            y_values = [skeleton_target[joint1, 1], skeleton_target[joint2, 1]]
-            z_values = [skeleton_target[joint1, 2], skeleton_target[joint2, 2]]
-            ax1.plot(x_values, y_values, z_values, 'ro-', alpha=0.8)
-
-        
         ax2.set_title('Top View of Skeleton Points')
         ax2.set_xlabel('X axis')
         ax2.set_ylabel('Y axis')
         ax2.set_xlim(x_lim)
         ax2.set_ylim(y_lim)
         ax2.scatter(pointcloud[:, 0], pointcloud[:, 1], c='blue', marker='o', alpha=0.3)
-        ax2.scatter(skeleton_target[:, 0], skeleton_target[:, 1], c='green', marker='o')
+
+        for skeleton_info in gt_info:
+            skeleton = skeleton_info['skeleton']
+            skeleton = np.array([[s['x'], s['y'], s['z']] for s in skeleton])
+            skeleton_target = skeleton
+            ax1.scatter(skeleton_target[:, 0], skeleton_target[:, 1], skeleton_target[:, 2], c='green', marker='o')
+
+            for joint1, joint2 in skeleton_connect:
+                x_values = [skeleton_target[joint1, 0], skeleton_target[joint2, 0]]
+                y_values = [skeleton_target[joint1, 1], skeleton_target[joint2, 1]]
+                z_values = [skeleton_target[joint1, 2], skeleton_target[joint2, 2]]
+                ax1.plot(x_values, y_values, z_values, 'ro-', alpha=0.8)
+
+            ax2.scatter(skeleton_target[:, 0], skeleton_target[:, 1], c='green', marker='o')
 
         info_text = f'Timestamp: {formatted_timestamp}\nPointcloud shape: {pointcloud.shape}\nSkeleton joints: {len(skeleton)}'
         ax1.text2D(0.05, 0.95, info_text, transform=ax1.transAxes, fontsize=12, va='top')
@@ -75,7 +77,7 @@ def visualize_pointcloud_and_skeleton(directory_path, x_lim, y_lim, z_lim):
             data = json.load(f)
             update_plot(data)
             plt.draw()
-            plt.pause(0.1)
+            plt.pause(0.05)
 
     plt.show()
 
@@ -85,6 +87,6 @@ if __name__ == "__main__":
     x_lim, y_lim, z_lim = [x_min, x_max], [y_min, y_max], [z_min, z_max]
 
     # .json directory path
-    directory_path = r'C:\Users\XiuzhuJian_05qqcw2\PycharmProjects\MatchSkeletenAndPcl\output\point_cloud_info_generated_at_2024_07_11_16_21_16'
+    directory_path = r'C:\Users\XiuzhuJian_05qqcw2\PycharmProjects\MatchSkeletenAndPcl\output\point_cloud_info_generated_at_2024_07_22_22_11_50'
 
     visualize_pointcloud_and_skeleton(directory_path, x_lim, y_lim, z_lim)
