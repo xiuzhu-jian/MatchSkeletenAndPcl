@@ -32,7 +32,7 @@ def match(skeleton_data_folder: str, pcl_data_folder: str, output_dir, config):
 
 
 def generate_target_info(skeleton_json, posture, action, config):
-    skeleton_in_vc_coord_system = covert_skeleton_to_vc_coordinate_system(skeleton_json, config)
+    skeleton_in_vc_coord_system, skeleton_mat = covert_skeleton_to_vc_coordinate_system(skeleton_json, config)
     if skeleton_in_vc_coord_system is None:
         return None
     target_info = {
@@ -40,7 +40,7 @@ def generate_target_info(skeleton_json, posture, action, config):
         'action': action,
         'isfall': 'no',
         'skeleton': skeleton_in_vc_coord_system,
-        'bbox': get_bbox(convert_skeleton_json_to_matrix(skeleton_json))
+        'bbox': get_bbox(skeleton_mat)
     }
     return target_info
 
@@ -57,6 +57,7 @@ def generate_targets_info(targets_json, posture, action, config):
 
 def covert_skeleton_to_vc_coordinate_system(skeleton_json, config):
     skeleton_data_in_pcl_coordinate_system = []
+    skeleton_array = []
     for keypoint in skeleton_json:
         xv, yv, zv = d455_to_vayyar_care(keypoint['x'], keypoint['y'], keypoint['z'],
                                          config.d455_x, config.d455_y, config.d455_z)
@@ -65,10 +66,12 @@ def covert_skeleton_to_vc_coordinate_system(skeleton_json, config):
             print(f"error: is_in_arena failed, index:{keypoint['index']}, "
                   f"before converted, x:{keypoint['x']}, y:{keypoint['y']}, z:{keypoint['z']}, "
                   f"after converted, x:{xv}, y:{yv}, z:{zv}")
-            return None
+            return None, None
         skeleton_data_in_pcl_coordinate_system.append(
             {'index': keypoint['index'], 'x': xv, 'y': yv, 'z': zv})
-    return skeleton_data_in_pcl_coordinate_system
+        skeleton_array.append([xv, yv, zv])
+    # output matrix as well
+    return skeleton_data_in_pcl_coordinate_system, np.array(skeleton_array)
 
 
 def process(data, config, output_dir):
