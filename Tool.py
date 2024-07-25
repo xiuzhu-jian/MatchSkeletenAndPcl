@@ -88,8 +88,10 @@ def get_bbox(skeleton_points):
     return bbox_data
 
 
-def make_output_dir():
+def make_output_dir(addition_str: str = ''):
     path = f'output/point_cloud_info_generated_at_{datetime.now().strftime("%Y_%m_%d_%H_%M_%S")}'
+    if addition_str != '':
+        path += f'_{addition_str}'
     os.makedirs(path, exist_ok=True)
     return path
 
