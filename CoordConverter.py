@@ -6,19 +6,6 @@ X = 0
 Y = 1
 Z = 2
 
-L515_POS_TYPE_FRONT = 0
-L515_POS_TYPE_FRONT_LEFT = 1
-L515_POS_TYPE_FRONT_RIGHT = 2
-L515_POS_TYPE_BACK = 3
-
-POS_TO_L515_POS_TYPE = {
-    'stand:0,1,2,3,4,5,6,7': L515_POS_TYPE_BACK,
-    'stand:8,9,10,11,12,13,14,15': L515_POS_TYPE_FRONT,
-    'sit:1,2,5,6,8,9,10,11,12,13,14,15': L515_POS_TYPE_FRONT,
-    'sit:0,7': L515_POS_TYPE_FRONT_LEFT,
-    'sit:3,4': L515_POS_TYPE_FRONT_RIGHT,
-}
-
 
 def convert_skeleton_to_vc_coord_system(skeleton_coords: list, pos_idx: int, vc_id: int, posture_type: PostureType):
     """
