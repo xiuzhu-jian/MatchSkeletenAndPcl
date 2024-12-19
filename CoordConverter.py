@@ -21,9 +21,9 @@ def convert_skeleton_to_vc_coord_system(skeleton_coords: list, pos_idx: int, vc_
 
     # Determine the appropriate converter based on the position of the L515.
     if posture_type == PostureType.STAND and pos_idx_to_row_idx(pos_idx) in (0, 1):
-        converter = point_from_front_l515_to_world
-    else:
         converter = point_from_back_l515_to_world
+    else:
+        converter = point_from_front_l515_to_world
 
     # convert from L515 coord system to world coord system
     skeleton_vc_coords = []
