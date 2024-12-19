@@ -38,7 +38,12 @@ def get_files_list(folder_path: str, get_timestamp_ms_func):
 
 
 def read_pcl_from_txt(file_path):
-    data = np.loadtxt(file_path)
+    try:
+        data = np.loadtxt(file_path)
+    except ValueError as e:
+        print(f'{file_path}: {e}')
+        return None
+
     if data.ndim == 1:
         if len(data) == 0:
             return None
