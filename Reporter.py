@@ -16,6 +16,6 @@ class Reporter:
         self.csv_writer.writerow(data)
         self.csv_file.flush()
 
-    def __del__(self):
+    def on_finish(self):
         print('close csv file')
         self.csv_file.close()
