@@ -1,0 +1,35 @@
+from Reporter import Reporter
+from TimeTool import ms_timestamp_to_str
+
+
+class CoordConverterReporter:
+    def __init__(self):
+        self.reporter = Reporter()
+
+    def on_start(self, report_name: str):
+        headers = [
+            'pcl_filename',
+            'sk_filename',
+            'pcl_timestamp',
+            'sk_timestamp',
+            'pcl_time',
+            'sk_time',
+            'diff',
+            'error',
+        ]
+        self.reporter.on_start(report_name, headers)
+
+    def report(self, pcl_filename: str, sk_filename: str, pcl_timestamp: float, sk_timestamp: float, err: str):
+        self.reporter.report([
+            pcl_filename,
+            sk_filename,
+            f'[{pcl_timestamp}]',
+            f'[{sk_timestamp}]',
+            f'[{ms_timestamp_to_str(pcl_timestamp)}]',
+            f'[{ms_timestamp_to_str(sk_timestamp)}]',
+            f'{pcl_timestamp - sk_timestamp}',
+            err,
+        ])
+
+    def on_finish(self):
+        self.reporter.on_finish()
