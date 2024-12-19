@@ -15,9 +15,6 @@ LABEL_TIMESTAMP_CORRECTION_IN_MILLISECONDS = 0
 
 
 def match(skeleton_data_folder: str, pcl_data_folder: str, output_dir, id_str, label_str, config, pos_idx, vc_id):
-    if output_dir is None:
-        output_dir = make_output_dir(id_str, label_str)
-
     skeleton_files = get_files_list(skeleton_data_folder, get_timestamp_ms_in_skeleton_filename)
     pcl_files = get_files_list(pcl_data_folder, get_timestamp_ms_in_pcl_filename)
 

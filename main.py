@@ -10,13 +10,8 @@ from PointCloudDataFileNameParser import parse_arena
 from Tool import make_output_dir
 from VCFolderNameParser import parse_vc_folder_name
 
-output_to_one_folder = False
-
 if __name__ == '__main__':
-    if output_to_one_folder:
-        output_dir = make_output_dir()
-    else:
-        output_dir = None
+    output_dir = make_output_dir()
 
     with open('ConfigData/config.json', 'r') as f:
         config = json.load(f)
@@ -54,6 +49,7 @@ if __name__ == '__main__':
                             posture,
                             pos_idx,
                             vc_id,
+                            sensor_mounting,
                         )
                     )
 
@@ -64,11 +60,17 @@ if __name__ == '__main__':
                     collection_id,
                     posture,
                     pos_idx,
-                    vc_id) in enumerate(pcl_skeleton_data_folders):
+                    vc_id,
+                    sensor_mounting) in enumerate(pcl_skeleton_data_folders):
             print(f'progress: {index + 1}/{total}\r\n{pcl_data_folder}\r\n{skeleton_data_folder}')
+
+            generated_data_folder_name = f'{posture}_{pos_idx:02}_{collection_id}_{vc_id}_{sensor_mounting}'
+            generated_data_folder_fullpath = os.path.join(output_dir, generated_data_folder_name)
+            os.makedirs(generated_data_folder_fullpath, exist_ok=True)
+
             match(skeleton_data_folder,
                   pcl_data_folder,
-                  output_dir,
+                  generated_data_folder_fullpath,
                   collection_id,
                   posture,
                   config,
