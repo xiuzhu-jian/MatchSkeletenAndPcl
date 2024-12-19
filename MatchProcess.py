@@ -48,8 +48,10 @@ def match(skeleton_data_folder: str, pcl_data_folder: str, output_dir, id_str, l
                              f'[{ms_timestamp_to_str(pcl_timestamp)}]', f'[{ms_timestamp_to_str(sk_timestamp)}]',
                              f'{pcl_timestamp - sk_timestamp}'])
         matched_data_list.append(
-            [os.path.join(pcl_data_folder, pcl_filename), os.path.join(skeleton_data_folder, sk_filename),
-             str(pcl_timestamp), str(sk_timestamp)])
+            [os.path.join(pcl_data_folder, pcl_filename),
+             os.path.join(skeleton_data_folder, sk_filename),
+             str(pcl_timestamp),
+             str(sk_timestamp)])
 
     csv_file.close()
 
