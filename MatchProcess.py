@@ -150,11 +150,3 @@ def process(data, config, output_dir, id_str, label_str, pos_idx, vc_id, sensor_
         output_f.close()
 
     reporter.on_finish()
-
-
-if __name__ == '__main__':
-    output_dir = make_output_dir()
-    match(r'C:\Users\XiuzhuJian_05qqcw2\PycharmProjects\D455Test\output\20240711-1609',
-          r'C:\jxz\PycharmProjects\VayyarCareDataCollector\console\data\2024-07-11-lab-YZX\Wall-vc1-ip-192.168.8.41\walk-30-s_4_20240711-1609',
-          output_dir,
-          Config(0, 0, 0.78, -1.5, 1.5, 0.2, 3, 0, 1.8))
