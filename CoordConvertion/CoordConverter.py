@@ -1,6 +1,6 @@
-from L515Coord import *
+from CoordConvertion.L515Coord import *
 from Definitions.PostureType import *
-from VCCoord import *
+from CoordConvertion.VCCoord import *
 
 X = 0
 Y = 1

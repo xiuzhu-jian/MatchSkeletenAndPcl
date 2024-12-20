@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 from Config import Config
-from L515Coord import stand_pos_idx_to_l515_coord, sit_pos_idx_to_l515_coord
+from CoordConvertion.L515Coord import stand_pos_idx_to_l515_coord, sit_pos_idx_to_l515_coord
 from MatchProcess import match
 from NameParser.PclDataFolderNameParser import parse_pcl_data_folder_name
 from NameParser.PointCloudDataFileNameParser import parse_arena

@@ -1,13 +1,13 @@
 import csv
 
 from Config import Config
-from CoordConverter import point_from_front_l515_to_world, point_from_back_l515_to_world, point_from_world_to_vc
+from CoordConvertion.CoordConverter import point_from_front_l515_to_world, point_from_back_l515_to_world, point_from_world_to_vc
 from Reporters.CoordConvertionReporter import CoordConverterReporter
-from L515Coord import pos_idx_to_row_idx
+from CoordConvertion.L515Coord import pos_idx_to_row_idx
 from Definitions.SkeletonDef import KEYPOINT_INDEX_TO_NAME
 from TimeTool import ms_timestamp_to_str
 from Tool import *
-from VCCoord import VC_ID_TO_COORD
+from CoordConvertion.VCCoord import VC_ID_TO_COORD
 
 X_CORRECTION_IN_METERS = 0.25
 LABEL_TIMESTAMP_CORRECTION_IN_MILLISECONDS = 0

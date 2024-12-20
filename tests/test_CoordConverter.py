@@ -1,5 +1,5 @@
 import pytest
-from CoordConverter import *
+from CoordConvertion.CoordConverter import *
 
 DIFF = 1e-6
 

@@ -1,5 +1,5 @@
 import pytest
-from L515Coord import *
+from CoordConvertion.L515Coord import *
 
 
 @pytest.mark.parametrize('pos_idx, row_idx', [
