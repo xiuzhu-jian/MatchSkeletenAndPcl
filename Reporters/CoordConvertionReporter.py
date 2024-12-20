@@ -1,4 +1,4 @@
-from Reporter import Reporter
+from Reporters.Reporter import Reporter
 from TimeTool import ms_timestamp_to_str
 
 

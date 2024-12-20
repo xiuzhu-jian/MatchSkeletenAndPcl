@@ -2,8 +2,7 @@ import csv
 
 from Config import Config
 from CoordConverter import point_from_front_l515_to_world, point_from_back_l515_to_world, point_from_world_to_vc
-from CoordConvertionReporter import CoordConverterReporter
-from CoordinatesConverter import d455_to_vayyar_care
+from Reporters.CoordConvertionReporter import CoordConverterReporter
 from L515Coord import pos_idx_to_row_idx
 from SkeletonDef import KEYPOINT_INDEX_TO_NAME
 from TimeTool import ms_timestamp_to_str
