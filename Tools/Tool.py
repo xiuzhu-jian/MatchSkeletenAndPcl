@@ -10,18 +10,6 @@ def get_timestamp_ms_in_skeleton_filename(filename: str):
     return float(filename.rsplit('_', 1)[-1].rsplit('.', 1)[0])
 
 
-def get_timestamp_ms_in_pcl_filename(filename: str):
-    sec, rest = filename.rsplit('_', 1)[-1].rsplit('.', 1)[0].split('.')
-    rest_len = len(rest)
-    if rest_len < 3:
-        msec = rest + '0' * (3 - rest_len)
-        tail = ''
-    else:
-        msec = rest[:3]
-        tail = rest[3:]
-    return float(sec + msec + '.' + tail)
-
-
 def _sort_key(element):
     return element[1]
 
