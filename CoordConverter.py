@@ -1,5 +1,5 @@
 from L515Coord import *
-from PostureType import *
+from Definitions.PostureType import *
 from VCCoord import *
 
 X = 0
