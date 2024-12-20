@@ -1,7 +1,8 @@
 import csv
 
 from Definitions.Config import Config
-from CoordConvertion.CoordConverter import point_from_front_l515_to_world, point_from_back_l515_to_world, point_from_world_to_vc
+from CoordConvertion.CoordConverter import point_from_front_l515_to_world, point_from_back_l515_to_world, \
+    point_from_world_to_vc
 from Reporters.CoordConvertionReporter import CoordConverterReporter
 from CoordConvertion.L515Coord import pos_idx_to_row_idx
 from Definitions.SkeletonDef import KEYPOINT_INDEX_TO_NAME
@@ -13,7 +14,8 @@ X_CORRECTION_IN_METERS = 0.25
 LABEL_TIMESTAMP_CORRECTION_IN_MILLISECONDS = 0
 
 
-def match(skeleton_data_folder: str, pcl_data_folder: str, output_dir, id_str, label_str, config, pos_idx, vc_id):
+def match(skeleton_data_folder: str, pcl_data_folder: str, output_dir, id_str, label_str, config, pos_idx, vc_id,
+          sensor_mounting):
     skeleton_files = get_files_list(skeleton_data_folder, get_timestamp_ms_in_skeleton_filename)
     pcl_files = get_files_list(pcl_data_folder, get_timestamp_ms_in_pcl_filename)
 
@@ -51,7 +53,7 @@ def match(skeleton_data_folder: str, pcl_data_folder: str, output_dir, id_str, l
 
     csv_file.close()
 
-    process(matched_data_list, config, output_dir, label_str, pos_idx, vc_id)
+    process(matched_data_list, config, output_dir, id_str, label_str, pos_idx, vc_id, sensor_mounting)
 
 
 def generate_target_info(skeleton_json, posture, action, config, pos_idx, vc_id):
@@ -110,9 +112,9 @@ def covert_skeleton_to_vc_coordinate_system(skeleton_json, config, pos_idx, vc_i
     return skeleton_data_in_pcl_coordinate_system, np.array(skeleton_array), 'success'
 
 
-def process(data, config, output_dir, label_str, pos_idx, vc_id):
+def process(data, config, output_dir, id_str, label_str, pos_idx, vc_id, sensor_mounting):
     reporter = CoordConverterReporter()
-    reporter.on_start(f'{label_str}-{pos_idx}-{vc_id}')
+    reporter.on_start(f'{label_str}_{pos_idx:02}_{id_str}_{vc_id}_{sensor_mounting}')
     fail_count = 0
     total = len(data)
     for pcl_file, sk_file, pcl_timestamp, sk_timestamp in data:

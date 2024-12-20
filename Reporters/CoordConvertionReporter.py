@@ -4,7 +4,7 @@ from Tools.TimeTool import ms_timestamp_to_str
 
 class CoordConverterReporter:
     def __init__(self):
-        self.reporter = Reporter()
+        self.reporter = Reporter('CoordConvertionReport')
 
     def on_start(self, report_name: str):
         headers = [

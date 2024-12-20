@@ -75,5 +75,6 @@ if __name__ == '__main__':
                   posture,
                   config,
                   pos_idx,
-                  vc_id)
+                  vc_id,
+                  sensor_mounting)
             exit()
