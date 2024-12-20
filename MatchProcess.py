@@ -1,6 +1,6 @@
 import csv
 
-from Config import Config
+from Definitions.Config import Config
 from CoordConvertion.CoordConverter import point_from_front_l515_to_world, point_from_back_l515_to_world, point_from_world_to_vc
 from Reporters.CoordConvertionReporter import CoordConverterReporter
 from CoordConvertion.L515Coord import pos_idx_to_row_idx
