@@ -97,7 +97,3 @@ def is_in_arena(x, y, z, x_min, x_max, y_min, y_max, z_min, z_max):
         print(err)
         return False, err
     return True, 'success'
-
-
-def get_posture_and_action_label(pcl_filename: str):
-    return pcl_filename.split('_', 2)[:2]
