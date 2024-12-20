@@ -1,6 +1,4 @@
-import numpy as np
-
-from Tool import *
+from Tools.Tool import *
 
 
 def test_get_timestamp_ms_in_skeleton_filename():

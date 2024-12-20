@@ -7,7 +7,7 @@ from CoordConvertion.L515Coord import stand_pos_idx_to_l515_coord, sit_pos_idx_t
 from MatchProcess import match
 from NameParser.PclDataFolderNameParser import parse_pcl_data_folder_name
 from NameParser.PointCloudDataFileNameParser import parse_arena
-from Tool import make_output_dir
+from Tools.Tool import make_output_dir
 from NameParser.VCFolderNameParser import parse_vc_folder_name
 
 if __name__ == '__main__':

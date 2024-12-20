@@ -5,8 +5,8 @@ from CoordConvertion.CoordConverter import point_from_front_l515_to_world, point
 from Reporters.CoordConvertionReporter import CoordConverterReporter
 from CoordConvertion.L515Coord import pos_idx_to_row_idx
 from Definitions.SkeletonDef import KEYPOINT_INDEX_TO_NAME
-from TimeTool import ms_timestamp_to_str
-from Tool import *
+from Tools.TimeTool import ms_timestamp_to_str
+from Tools.Tool import *
 from CoordConvertion.VCCoord import VC_ID_TO_COORD
 
 X_CORRECTION_IN_METERS = 0.25

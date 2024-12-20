@@ -1,5 +1,5 @@
 from Reporters.Reporter import Reporter
-from TimeTool import ms_timestamp_to_str
+from Tools.TimeTool import ms_timestamp_to_str
 
 
 class CoordConverterReporter:
