@@ -7,11 +7,15 @@ from CoordConvertion.L515Coord import stand_pos_idx_to_l515_coord, sit_pos_idx_t
 from MatchProcess import match
 from NameParser.PclDataFolderNameParser import parse_pcl_data_folder_name
 from NameParser.PointCloudDataFileNameParser import parse_arena
-from Tools.Tool import make_output_dir
+from Tools.FolderCreater import create_data_output_folder, create_match_log_output_folder, \
+    create_coord_convertion_log_output_folder, create_output_folder, create_match_output_folder
 from NameParser.VCFolderNameParser import parse_vc_folder_name
 
 if __name__ == '__main__':
-    output_dir = make_output_dir()
+    output_folder = create_output_folder()
+    data_folder = create_data_output_folder(output_folder)
+    match_log_output_folder = create_match_log_output_folder(output_folder)
+    coord_convertion_log_output_folder = create_coord_convertion_log_output_folder(output_folder)
 
     with open('ConfigData/config.json', 'r') as f:
         config = json.load(f)
@@ -64,17 +68,17 @@ if __name__ == '__main__':
                     sensor_mounting) in enumerate(pcl_skeleton_data_folders):
             print(f'progress: {index + 1}/{total}\r\n{pcl_data_folder}\r\n{skeleton_data_folder}')
 
-            generated_data_folder_name = f'{posture}_{pos_idx:02}_{collection_id}_{vc_id}_{sensor_mounting}'
-            generated_data_folder_fullpath = os.path.join(output_dir, generated_data_folder_name)
-            os.makedirs(generated_data_folder_fullpath, exist_ok=True)
+            generated_data_folder_fullpath = create_match_output_folder(data_folder, posture, pos_idx, collection_id,
+                                                                        vc_id, sensor_mounting)
 
             match(skeleton_data_folder,
                   pcl_data_folder,
                   generated_data_folder_fullpath,
+                  match_log_output_folder,
+                  coord_convertion_log_output_folder,
                   collection_id,
                   posture,
                   config,
                   pos_idx,
                   vc_id,
                   sensor_mounting)
-            exit()

@@ -1,22 +1,22 @@
-from Reporter import Reporter
+from Reporters.Reporter import Reporter
 from Tools.TimeTool import ms_timestamp_to_str
 
 
 class MatchResultReporter:
     def __init__(self):
-        self.reporter = Reporter()
+        self.reporter = Reporter('MatchResultReporter')
 
-    def on_start(self, report_name: str):
+    def on_start(self, output_folder: str, report_name: str):
         headers = [
             'pcl_filename',
             'sk_filename',
-            'pcl_timestamp',
-            'sk_timestamp',
+            'pcl_timestamp_ms',
+            'sk_timestamp_ms',
             'pcl_time',
             'sk_time',
-            'diff',
+            'diff_ms',
         ]
-        self.reporter.on_start(report_name, headers)
+        self.reporter.on_start(output_folder, report_name, headers)
 
     def report(self, pcl_filename: str, sk_filename: str, pcl_timestamp: float, sk_timestamp: float):
         self.reporter.report([
@@ -28,3 +28,6 @@ class MatchResultReporter:
             f'[{ms_timestamp_to_str(sk_timestamp)}]',
             f'{pcl_timestamp - sk_timestamp}',
         ])
+
+    def on_finish(self):
+        self.reporter.on_finish()

@@ -1,5 +1,4 @@
 import csv
-from datetime import datetime
 
 
 class Reporter:
@@ -8,8 +7,8 @@ class Reporter:
         self.csv_file = None
         self.csv_writer = None
 
-    def on_start(self, report_name: str, headers: list):
-        self.csv_file = open(f'{self.type_name}_{report_name}.csv', 'w', newline='')
+    def on_start(self, output_folder: str, report_name: str, headers: list):
+        self.csv_file = open(f'{output_folder}/{self.type_name}_{report_name}.csv', 'w', newline='')
         self.csv_writer = csv.writer(self.csv_file)
         self.csv_writer.writerow(headers)
 

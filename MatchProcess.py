@@ -1,12 +1,9 @@
-import csv
-
-from Definitions.Config import Config
 from CoordConvertion.CoordConverter import point_from_front_l515_to_world, point_from_back_l515_to_world, \
     point_from_world_to_vc
 from Reporters.CoordConvertionReporter import CoordConverterReporter
 from CoordConvertion.L515Coord import pos_idx_to_row_idx
 from Definitions.SkeletonDef import KEYPOINT_INDEX_TO_NAME
-from Tools.TimeTool import ms_timestamp_to_str
+from Reporters.MatchResultReporter import MatchResultReporter
 from Tools.Tool import *
 from CoordConvertion.VCCoord import VC_ID_TO_COORD
 
@@ -14,15 +11,17 @@ X_CORRECTION_IN_METERS = 0.25
 LABEL_TIMESTAMP_CORRECTION_IN_MILLISECONDS = 0
 
 
-def match(skeleton_data_folder: str, pcl_data_folder: str, output_dir, id_str, label_str, config, pos_idx, vc_id,
+def match(skeleton_data_folder: str, pcl_data_folder: str,
+          data_output_dir,
+          match_log_output_folder: str,
+          coord_convertion_log_output_folder: str,
+          id_str, label_str, config, pos_idx, vc_id,
           sensor_mounting):
     skeleton_files = get_files_list(skeleton_data_folder, get_timestamp_ms_in_skeleton_filename)
     pcl_files = get_files_list(pcl_data_folder, get_timestamp_ms_in_pcl_filename)
 
-    csv_file = open(f'RunData/generated_at_{datetime.now().strftime("%Y%m%d-%H%M%S")}_{id_str}.csv', 'w', newline='')
-    csv_writer = csv.writer(csv_file)
-    csv_writer.writerow(
-        ['pcl_filename', 'sk_filename', 'pcl_timestamp_ms', 'sk_timestamp_ms', 'pcl_time', 'sk_time', 'diff_ms'])
+    reporter = MatchResultReporter()
+    reporter.on_start(match_log_output_folder, f'{label_str}_{pos_idx:02}_{id_str}_{vc_id}_{sensor_mounting}')
 
     matched_data_list = []
 
@@ -42,18 +41,17 @@ def match(skeleton_data_folder: str, pcl_data_folder: str, output_dir, id_str, l
             print(f'skeleton enumeration end, pcl_file_index={pcl_file_index}')
             break
 
-        csv_writer.writerow([pcl_filename, sk_filename, f'[{pcl_timestamp}]', f'[{sk_timestamp}]',
-                             f'[{ms_timestamp_to_str(pcl_timestamp)}]', f'[{ms_timestamp_to_str(sk_timestamp)}]',
-                             f'{pcl_timestamp - sk_timestamp}'])
+        reporter.report(pcl_filename, sk_filename, float(pcl_timestamp), float(sk_timestamp))
         matched_data_list.append(
             [os.path.join(pcl_data_folder, pcl_filename),
              os.path.join(skeleton_data_folder, sk_filename),
              str(pcl_timestamp),
              str(sk_timestamp)])
 
-    csv_file.close()
+    reporter.on_finish()
 
-    process(matched_data_list, config, output_dir, id_str, label_str, pos_idx, vc_id, sensor_mounting)
+    process(matched_data_list, config, data_output_dir, id_str, label_str, pos_idx, vc_id, sensor_mounting,
+            coord_convertion_log_output_folder)
 
 
 def generate_target_info(skeleton_json, posture, action, config, pos_idx, vc_id):
@@ -112,9 +110,12 @@ def covert_skeleton_to_vc_coordinate_system(skeleton_json, config, pos_idx, vc_i
     return skeleton_data_in_pcl_coordinate_system, np.array(skeleton_array), 'success'
 
 
-def process(data, config, output_dir, id_str, label_str, pos_idx, vc_id, sensor_mounting):
+def process(data, config, data_output_dir, id_str, label_str, pos_idx, vc_id, sensor_mounting,
+            coord_convertion_log_output_folder):
     reporter = CoordConverterReporter()
-    reporter.on_start(f'{label_str}_{pos_idx:02}_{id_str}_{vc_id}_{sensor_mounting}')
+    reporter.on_start(coord_convertion_log_output_folder,
+                      f'{label_str}_{pos_idx:02}_{id_str}_{vc_id}_{sensor_mounting}')
+
     fail_count = 0
     total = len(data)
     for pcl_file, sk_file, pcl_timestamp, sk_timestamp in data:
@@ -145,7 +146,7 @@ def process(data, config, output_dir, id_str, label_str, pos_idx, vc_id, sensor_
             continue
         point_cloud_info['gt_info'] = json.dumps(targets_info)
 
-        output_f = open(f'{output_dir}/point_cloud_info_{pcl_timestamp}.json', 'w')
+        output_f = open(f'{data_output_dir}/point_cloud_info_{pcl_timestamp}.json', 'w')
         json.dump(point_cloud_info, output_f)
         output_f.close()
 

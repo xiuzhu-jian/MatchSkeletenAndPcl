@@ -6,7 +6,7 @@ class CoordConverterReporter:
     def __init__(self):
         self.reporter = Reporter('CoordConvertionReport')
 
-    def on_start(self, report_name: str):
+    def on_start(self, output_folder: str, report_name: str):
         headers = [
             'pcl_filename',
             'sk_filename',
@@ -17,7 +17,7 @@ class CoordConverterReporter:
             'diff',
             'error',
         ]
-        self.reporter.on_start(report_name, headers)
+        self.reporter.on_start(output_folder, report_name, headers)
 
     def report(self, pcl_filename: str, sk_filename: str, pcl_timestamp: float, sk_timestamp: float, err: str):
         self.reporter.report([

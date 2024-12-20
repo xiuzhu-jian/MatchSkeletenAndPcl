@@ -104,16 +104,6 @@ def estimate_bbox_from_tracker(x, y, z):
     }
 
 
-def make_output_dir(addition_str: str = '', label_str: str = ''):
-    path = f'output/point_cloud_info_generated_at_{datetime.now().strftime("%Y_%m_%d_%H_%M_%S")}'
-    if addition_str != '':
-        path += f'_{addition_str}'
-    if label_str != '':
-        path += f'_{label_str}'
-    os.makedirs(path, exist_ok=True)
-    return path
-
-
 def is_in_arena(x, y, z, x_min, x_max, y_min, y_max, z_min, z_max):
     if not x_min < x < x_max:
         err = f'error: x out of arena, x:{x}, x_min:{x_min}, x_max:{x_max}'
