@@ -1,4 +1,4 @@
-from PclDataFolderNameParser import *
+from NameParser.PclDataFolderNameParser import *
 
 
 def test_parse_filename():

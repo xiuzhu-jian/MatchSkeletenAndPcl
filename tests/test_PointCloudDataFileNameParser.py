@@ -1,4 +1,4 @@
-from PointCloudDataFileNameParser import *
+from NameParser.PointCloudDataFileNameParser import *
 
 
 def test_parse_arena():

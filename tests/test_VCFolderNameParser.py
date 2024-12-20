@@ -1,4 +1,4 @@
-from VCFolderNameParser import parse_vc_folder_name
+from NameParser.VCFolderNameParser import parse_vc_folder_name
 
 
 def test_parse_vc_folder_name():

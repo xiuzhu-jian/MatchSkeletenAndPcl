@@ -5,10 +5,10 @@ from pathlib import Path
 from Config import Config
 from L515Coord import stand_pos_idx_to_l515_coord, sit_pos_idx_to_l515_coord
 from MatchProcess import match
-from PclDataFolderNameParser import parse_pcl_data_folder_name
-from PointCloudDataFileNameParser import parse_arena
+from NameParser.PclDataFolderNameParser import parse_pcl_data_folder_name
+from NameParser.PointCloudDataFileNameParser import parse_arena
 from Tool import make_output_dir
-from VCFolderNameParser import parse_vc_folder_name
+from NameParser.VCFolderNameParser import parse_vc_folder_name
 
 if __name__ == '__main__':
     output_dir = make_output_dir()
@@ -76,3 +76,4 @@ if __name__ == '__main__':
                   config,
                   pos_idx,
                   vc_id)
+            exit()
