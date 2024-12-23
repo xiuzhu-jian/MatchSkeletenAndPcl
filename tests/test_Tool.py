@@ -30,7 +30,7 @@ def test_get_skeleton_files_list():
         (r"skeleton_data_1720507908290.8694.json", 1720507908290.8694),
         (r"skeleton_data_1720507908324.196.json", 1720507908324.196),
     ]
-    assert get_files_list('../TestData/skeleton', get_timestamp_ms_in_skeleton_filename) == files_list
+    assert get_files_list_sorted_by_time('../TestData/skeleton', get_timestamp_ms_in_skeleton_filename) == files_list
 
 
 def test_get_pcl_files_list():
@@ -59,7 +59,7 @@ def test_get_pcl_files_list():
         ("Wash feet_Wash feet_-1.50_1.50_0.20_2.80_0.00_1.80_1.60_2.80_1720507918.3386285.txt", 1720507918338.6285),
         ("Wash feet_Wash feet_-1.50_1.50_0.20_2.80_0.00_1.80_1.60_2.80_1720507918.4776878.txt", 1720507918477.6878),
     ]
-    assert get_files_list('../TestData/pcl', get_timestamp_ms_in_pcl_filename) == files_list
+    assert get_files_list_sorted_by_time('../TestData/pcl', get_timestamp_ms_in_pcl_filename) == files_list
 
 
 def test_convert_skeleton_to_matrix():

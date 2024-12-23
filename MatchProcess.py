@@ -22,8 +22,8 @@ def match(skeleton_data_folder: str, pcl_data_folder: str,
           coord_convertion_log_output_folder: str,
           id_str, label_str, config, pos_idx, vc_id,
           sensor_mounting):
-    skeleton_files = get_files_list(skeleton_data_folder, get_timestamp_ms_in_skeleton_filename)
-    pcl_files = get_files_list(pcl_data_folder, get_timestamp_ms_in_pcl_filename)
+    skeleton_files = get_files_list_sorted_by_time(skeleton_data_folder, get_timestamp_ms_in_skeleton_filename)
+    pcl_files = get_files_list_sorted_by_time(pcl_data_folder, get_timestamp_ms_in_pcl_filename)
 
     reporter = MatchResultReporter()
     reporter.on_start(match_log_output_folder,

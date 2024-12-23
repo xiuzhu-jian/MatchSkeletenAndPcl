@@ -7,7 +7,7 @@ def _sort_key(element):
     return element[1]
 
 
-def get_files_list(folder_path: str, get_timestamp_ms_func):
+def get_files_list_sorted_by_time(folder_path: str, get_timestamp_ms_func):
     files_list = os.listdir(folder_path)
     file_and_timestamp_ms_list = []
     for file_name in files_list:
