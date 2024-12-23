@@ -1,4 +1,4 @@
-from NameParser.PointCloudDataFileNameParser import get_timestamp_ms_in_pcl_filename
+from NameParser.PclDataFileNameParser import get_timestamp_ms_in_pcl_filename
 from NameParser.SkeletonDataFileNameParser import get_timestamp_ms_in_skeleton_filename
 from Tools.Tool import *
 

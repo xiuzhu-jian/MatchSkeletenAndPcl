@@ -6,7 +6,7 @@ from Definitions.Config import Config
 from CoordConvertion.L515Coord import stand_pos_idx_to_l515_coord, sit_pos_idx_to_l515_coord
 from MatchProcess import match
 from NameParser.PclDataFolderNameParser import parse_pcl_data_folder_name
-from NameParser.PointCloudDataFileNameParser import parse_arena
+from NameParser.PclDataFileNameParser import parse_arena
 from Tools.FolderCreater import create_data_output_folder, create_match_log_output_folder, \
     create_coord_convertion_log_output_folder, create_output_folder, create_match_output_folder
 from NameParser.VCFolderNameParser import parse_vc_folder_name
