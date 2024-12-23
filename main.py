@@ -31,7 +31,6 @@ if __name__ == '__main__':
                     for pcl_data_file in Path(pcl_data_dir_fullpath).iterdir():
                         if pcl_data_file.is_file():
                             break
-
                     arena: list = parse_arena(pcl_data_file.name)
 
                     if posture == 'stand':
