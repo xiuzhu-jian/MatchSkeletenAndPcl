@@ -19,10 +19,10 @@ def main():
     coord_convertion_log_output_folder = create_coord_convertion_log_output_folder(output_folder)
 
     with open('ConfigData/config.json', 'r') as f:
-        config = json.load(f)
+        config_data = json.load(f)
 
         pcl_skeleton_data_folders = []
-        for item in config:
+        for item in config_data:
             for vc_dir in os.listdir(item['pcl_all_data_folder']):
                 sensor_mounting, vc_id = parse_vc_folder_name(vc_dir)
                 for pcl_data_dir in os.listdir(os.path.join(item['pcl_all_data_folder'], vc_dir)):
