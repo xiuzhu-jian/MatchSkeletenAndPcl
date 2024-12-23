@@ -95,7 +95,7 @@ def covert_skeleton_to_vc_coordinate_system(skeleton_json, config, pos_idx, vc_i
     skeleton_array = []
     for keypoint in skeleton_json:
         xv, yv, zv = converter((keypoint['x'], keypoint['y'], keypoint['z']),
-                               (config.d455_x, config.d455_y, config.d455_z))
+                               (config.l515_x, config.l515_y, config.l515_z))
         xv, yv, zv = point_from_world_to_vc((xv, yv, zv), vc_world_coord)
         ret, msg = is_in_arena(xv, yv, zv, config.x_min, config.x_max, config.y_min, config.y_max, config.z_min,
                                config.z_max)

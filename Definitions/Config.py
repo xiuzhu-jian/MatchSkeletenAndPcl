@@ -1,8 +1,8 @@
 class Config(object):
-    def __init__(self, d455_x, d455_y, d455_z, x_min, x_max, y_min, y_max, z_min, z_max):
-        self.d455_x = float(d455_x)
-        self.d455_y = float(d455_y)
-        self.d455_z = float(d455_z)
+    def __init__(self, l515_x, l515_y, l515_z, x_min, x_max, y_min, y_max, z_min, z_max):
+        self.l515_x = float(l515_x)
+        self.l515_y = float(l515_y)
+        self.l515_z = float(l515_z)
         self.x_min = float(x_min)
         self.x_max = float(x_max)
         self.y_min = float(y_min)
