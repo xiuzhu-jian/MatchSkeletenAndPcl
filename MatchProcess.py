@@ -116,44 +116,47 @@ def covert_skeleton_to_vc_coordinate_system(skeleton_json, config, pos_idx, vc_i
     return skeleton_data_in_pcl_coordinate_system, np.array(skeleton_array), 'success'
 
 
+def process_one_frame(pcl_file, sk_file, pcl_timestamp, posture, config, pos_idx, vc_id):
+    if os.stat(pcl_file).st_size == 0:
+        err_msg = f'error: 0kb point cloud file({pcl_file})'
+        return False, err_msg
+
+    pcl = read_pcl_from_txt(pcl_file)
+    if pcl is None:
+        err_msg = f'error: read none from pcl_file({pcl_file})'
+        return False, err_msg
+
+    sk_f = open(sk_file, 'r')
+    json_data = json.load(sk_f)
+    sk_f.close()
+
+    targets_info, msg = generate_targets_info(json_data['gt_info'], posture, posture, config, pos_idx, vc_id)
+    if targets_info is None:
+        return False, msg
+
+    point_cloud_info = {
+        'timestamp': pcl_timestamp,
+        'points': json.dumps(pcl),
+        'gt_info': json.dumps(targets_info),
+    }
+    return True, point_cloud_info
+
+
 def process(data, config, data_output_dir, id_str, label_str, pos_idx, vc_id, sensor_mounting,
             coord_convertion_log_output_folder):
     reporter = CoordConverterReporter()
     reporter.on_start(coord_convertion_log_output_folder,
                       create_collection_name(label_str, pos_idx, id_str, vc_id, sensor_mounting))
 
-    fail_count = 0
-    total = len(data)
     for pcl_file, sk_file, pcl_timestamp, sk_timestamp in data:
-        point_cloud_info = {'timestamp': pcl_timestamp}
-
-        sk_f = open(sk_file, 'r')
-        json_data = json.load(sk_f)
-        sk_f.close()
-
-        if os.stat(pcl_file).st_size == 0:
-            print(f'error: 0kb point cloud file({pcl_file})')
-            reporter.report(pcl_file, sk_file, float(pcl_timestamp), float(sk_timestamp), '0kb pcl')
+        ret = process_one_frame(pcl_file, sk_file, pcl_timestamp, label_str, config, pos_idx, vc_id)
+        if ret[0] is False:
+            err_msg = ret[1]
+            reporter.report(pcl_file, sk_file, float(pcl_timestamp), float(sk_timestamp), err_msg)
             continue
-
-        pcl = read_pcl_from_txt(pcl_file)
-        if pcl is None:
-            print(f'error: read none from pcl_file({pcl_file})')
-            reporter.report(pcl_file, sk_file, float(pcl_timestamp), float(sk_timestamp), 'none pcl')
-            continue
-        point_cloud_info['points'] = json.dumps(pcl)
-
-        targets_info, msg = generate_targets_info(json_data['gt_info'], label_str, label_str, config, pos_idx, vc_id)
-        if targets_info is None:
-            fail_count += 1
-            print(f'error: generate_targets_info failed, skeleton out of arena: {sk_file}')
-            print(f'fail_count:{fail_count}, total:{total}----------')
-            reporter.report(pcl_file, sk_file, float(pcl_timestamp), float(sk_timestamp), msg)
-            continue
-        point_cloud_info['gt_info'] = json.dumps(targets_info)
 
         output_f = open(f'{data_output_dir}/point_cloud_info_{pcl_timestamp}.json', 'w')
-        json.dump(point_cloud_info, output_f)
+        json.dump(ret[1], output_f)
         output_f.close()
 
     reporter.on_finish()
