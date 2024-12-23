@@ -11,7 +11,8 @@ from Tools.FolderCreater import create_data_output_folder, create_match_log_outp
     create_coord_convertion_log_output_folder, create_output_folder, create_match_output_folder
 from NameParser.VCFolderNameParser import parse_vc_folder_name
 
-if __name__ == '__main__':
+
+def main():
     output_folder = create_output_folder()
     data_folder = create_data_output_folder(output_folder)
     match_log_output_folder = create_match_log_output_folder(output_folder)
@@ -81,3 +82,7 @@ if __name__ == '__main__':
                   pos_idx,
                   vc_id,
                   sensor_mounting)
+
+
+if __name__ == '__main__':
+    main()
