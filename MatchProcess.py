@@ -8,6 +8,7 @@ from Reporters.CoordConvertionReporter import CoordConverterReporter
 from CoordConvertion.L515Coord import pos_idx_to_row_idx
 from Definitions.SkeletonDef import KEYPOINT_INDEX_TO_NAME
 from Reporters.MatchResultReporter import MatchResultReporter
+from Tools.CollectionNameCreater import create_collection_name
 from Tools.Tool import *
 from CoordConvertion.VCCoord import VC_ID_TO_COORD
 
@@ -25,7 +26,8 @@ def match(skeleton_data_folder: str, pcl_data_folder: str,
     pcl_files = get_files_list(pcl_data_folder, get_timestamp_ms_in_pcl_filename)
 
     reporter = MatchResultReporter()
-    reporter.on_start(match_log_output_folder, f'{label_str}_{pos_idx:02}_{id_str}_{vc_id}_{sensor_mounting}')
+    reporter.on_start(match_log_output_folder,
+                      create_collection_name(label_str, pos_idx, id_str, vc_id, sensor_mounting))
 
     matched_data_list = []
 
@@ -118,7 +120,7 @@ def process(data, config, data_output_dir, id_str, label_str, pos_idx, vc_id, se
             coord_convertion_log_output_folder):
     reporter = CoordConverterReporter()
     reporter.on_start(coord_convertion_log_output_folder,
-                      f'{label_str}_{pos_idx:02}_{id_str}_{vc_id}_{sensor_mounting}')
+                      create_collection_name(label_str, pos_idx, id_str, vc_id, sensor_mounting))
 
     fail_count = 0
     total = len(data)
